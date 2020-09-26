@@ -12,7 +12,7 @@ app.use(require('./routes'));
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pizza-hunt', {
   useFindAndModify: false,
-  userNewUrlParser: true,
+  useNewUrlParser: true,
   useUnifiedTopology: true
 });
 

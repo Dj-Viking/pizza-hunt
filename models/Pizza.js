@@ -1,5 +1,8 @@
 const { Schema, model } = require('mongoose');
 
+//function for tracking the id sequence of pizzas
+// and assigning an auto incrementing id
+
 const PizzaSchema = new Schema
 (
   {
