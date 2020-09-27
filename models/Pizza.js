@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const moment = require('moment');
 
 const PizzaSchema = new Schema
 (
@@ -11,7 +12,9 @@ const PizzaSchema = new Schema
     },
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
+      //this will format the date whenever the createdAt value is retrieved 
+      get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
     },
     size: {
       type: String,
@@ -29,6 +32,7 @@ const PizzaSchema = new Schema
   {//to use virtuals tell the schema to use virtuals
     toJSON: {
       virtuals: true,
+      getters: true //allowing the use of our getter inside createdAt
     },
     id: false//setting this false since this is a virtual that mongoose returns
   }
