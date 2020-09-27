@@ -13,6 +13,15 @@ const pizzaController = {
     console.log(``);
     console.log(req.path);
     Pizza.find({})
+    .populate(//populate the pizza search with comments associated with the pizzas
+      {//-__v means we dont want the __v field to be returned
+        path: 'comments',
+        select: '-__v'
+      }
+    )
+    .select('-__v')//lets not return the pizza's __v field either
+    //sorting and setting up query so the newest pizza returns first
+    .sort({ _id: -1 })
     .then(dbPizzaData => res.json(dbPizzaData))
     .catch(e => { console.log(e); res.status(400).json(e); });
   },
@@ -28,6 +37,13 @@ const pizzaController = {
         _id: params.id
       }
     )
+    .populate(
+      {
+        path: 'comments',
+        select: '-__v'
+      }
+    )
+    .select('-__v')
     .then(dbPizzaData => {
       //if no pizza is found, send 404
       if (!dbPizzaData) {
