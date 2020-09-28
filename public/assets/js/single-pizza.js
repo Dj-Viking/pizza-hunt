@@ -9,6 +9,26 @@ const $newCommentForm = document.querySelector('#new-comment-form');
 
 let pizzaId;
 
+const getPizza = async () => {
+  //get id of pizza
+  try {
+    const searchParams = new URLSearchParams(document.location.search.substring(1));
+    console.log(searchParams);
+    const pizzaId = searchParams.get('id');
+    console.log(pizzaId);
+  
+    //get pizzaInfo
+    const pizzaInfo = await fetch(`/api/pizzas/${pizzaId}`);
+    const json = await pizzaInfo.json();
+    console.log(json);
+    printPizza(json);
+  } catch (error) {
+    console.log(error);
+    throw new Error({message: 'something went wrong'});
+  }
+}
+//window.addEventListener('DOMContentLoaded', getPizza);
+
 function printPizza(pizzaData) {
   console.log(pizzaData);
 
@@ -29,6 +49,37 @@ function printPizza(pizzaData) {
   } else {
     $commentSection.innerHTML = '<h4 class="bg-dark p-3 rounded">No comments yet!</h4>';
   }
+}
+
+const handleNewCommentSubmit = async (event) => {
+  event.preventDefault();
+  const commentBody = $newCommentForm.querySelector('#comment').value;
+  const writtenBy = $newCommentForm.querySelector('#written-by').value;
+  if (!commentBody || !writtenBy) {
+    return false;
+  }
+  try {
+    const formData = {commentBody, writtenBy};
+    const response = await fetch(`/api/comments/${pizzaId}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
+    console.log(response);
+    if (!response.ok) {
+      throw new Error('there was an error');
+    } else {
+      const json = await response.json();
+      console.log(json);
+      location.reload();
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
 }
 
 function printComment(comment) {
@@ -52,11 +103,11 @@ function printComment(comment) {
       <form class="reply-form mt-3" data-commentid='${comment._id}'>
         <div class="mb-3">
           <label for="reply-name">Leave Your Name</label>
-          <input class="form-input" name="reply-name" required />
+          <input class="form-input" autocomplete="off" name="reply-name" required />
         </div>
         <div class="mb-3">
           <label for="reply">Leave a Reply</label>
-          <textarea class="form-textarea form-input"  name="reply" required></textarea>
+          <textarea class="form-textarea form-input" autocomplete="off" name="reply" required></textarea>
         </div>
 
         <button class="mt-2 btn display-block w-100">Add Reply</button>
@@ -74,19 +125,6 @@ function printReply(reply) {
     <p>${reply.replyBody}</p>
   </div>
 `;
-}
-
-function handleNewCommentSubmit(event) {
-  event.preventDefault();
-
-  const commentBody = $newCommentForm.querySelector('#comment').value;
-  const writtenBy = $newCommentForm.querySelector('#written-by').value;
-
-  if (!commentBody || !writtenBy) {
-    return false;
-  }
-
-  const formData = { commentBody, writtenBy };
 }
 
 function handleNewReplySubmit(event) {
@@ -111,6 +149,8 @@ function handleNewReplySubmit(event) {
 $backBtn.addEventListener('click', function() {
   window.history.back();
 });
+
+getPizza();
 
 $newCommentForm.addEventListener('submit', handleNewCommentSubmit);
 $commentSection.addEventListener('submit', handleNewReplySubmit);
