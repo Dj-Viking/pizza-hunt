@@ -66,7 +66,10 @@ const handlePizzaSubmit = event => {
     console.log("pizza created successfully");
     console.log(json);
   })
-  .catch(e => console.log(e));
+  .catch(e => {
+    console.log(e);
+    saveRecord(formData);
+  });
 };
 
 $pizzaForm.addEventListener('submit', handlePizzaSubmit);
