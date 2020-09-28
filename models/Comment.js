@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const moment = require('moment');
 
 const CommentSchema = new Schema
 (
@@ -11,7 +12,13 @@ const CommentSchema = new Schema
     },
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
+      get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
+    }
+  },
+  {
+    toJSON: {
+      getters: true
     }
   }
 );
