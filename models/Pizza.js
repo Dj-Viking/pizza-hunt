@@ -43,6 +43,10 @@ const PizzaSchema = new Schema
 // with a helper before responding to the API request
 PizzaSchema.virtual('commentCount')
 .get(function() {
+  console.log("\x1b[33m", "checking comments.length", "\x1b[00m");
+  for (let i = 0; i < this.comments.length; i++) {
+    console.log(this.comments[i]);
+  }
   return this.comments.reduce((total, comment) => total + comment.replies.length + 1, 0);
 });
 //using reduce method to tally up the total of every comment with replies

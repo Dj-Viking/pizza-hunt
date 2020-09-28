@@ -53,6 +53,7 @@ function printPizza(pizzaData) {
 
 const handleNewCommentSubmit = async (event) => {
   event.preventDefault();
+  //console.log(pizzaId);
   const commentBody = $newCommentForm.querySelector('#comment').value;
   const writtenBy = $newCommentForm.querySelector('#written-by').value;
   if (!commentBody || !writtenBy) {
@@ -127,23 +128,41 @@ function printReply(reply) {
 `;
 }
 
-function handleNewReplySubmit(event) {
+async function handleNewReplySubmit(event) {
   event.preventDefault();
-
+  
   if (!event.target.matches('.reply-form')) {
     return false;
   }
-
   const commentId = event.target.getAttribute('data-commentid');
-
   const writtenBy = event.target.querySelector('[name=reply-name]').value;
   const replyBody = event.target.querySelector('[name=reply]').value;
-
   if (!replyBody || !writtenBy) {
     return false;
   }
-
   const formData = { writtenBy, replyBody };
+  console.log(pizzaId);
+  console.log(commentId);
+  
+  try {
+    const response = await fetch(`/api/comments/${pizzaId}/${commentId}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
+    console.log(response);
+    if (!response.ok) {
+      throw new Error("there was an error with this request");
+    }
+    const json = await response.json();
+    console.log(json);
+    location.reload();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 $backBtn.addEventListener('click', function() {

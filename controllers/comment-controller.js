@@ -15,7 +15,14 @@ const commentController = {
         { _id: params.pizzaId },
         { $push: { comments: _id } },//$push method works just the same as adding to an array. all mongoDB functions start with a ( $ ) sign to note that the function is native to mongoDB
         { new: true }
-      );
+      )
+      .populate(
+        {
+          path: 'comments',
+          select: '-__v'
+        }
+      )
+      .select('-__v')
     })
     .then(dbPizzaData => {
       console.log(dbPizzaData);
@@ -47,7 +54,14 @@ const commentController = {
         { _id: params.pizzaId },
         { $pull: { comments: params.commentId } },//pull is opposite of push, removes an item instead of adding the item.
         { new: true }
-      );
+      )
+      .populate(
+        {
+          path: 'comments',
+          select: '-__v'
+        }
+      )
+      .select('-__v')
     })
     .then(dbPizzaData => {
       console.log(dbPizzaData);
