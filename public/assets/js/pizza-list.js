@@ -1,16 +1,20 @@
 const $pizzaList = document.querySelector('#pizza-list');
 
 
-const getAllPizzas = async (event) => {
-  event.preventDefault();
-  console.log("DOM CONTENT LOADED!");
-  const pizzas = await fetch('/api/pizzas', {method: 'GET'});
-  const json = await pizzas.json();
-  console.log(json);
-  json.map(pizza => printPizza(pizza));
-  // for (let i = 0; i < json.length; i++) {
-  //   printPizza(json[i]);
-  // }
+const getAllPizzas = async () => {
+  // event.preventDefault();
+  //console.log("DOM CONTENT LOADED!");
+  try {
+    const pizzas = await fetch('/api/pizzas', {method: 'GET'});
+    const json = await pizzas.json();
+    console.log(json);
+    json.map(pizza => printPizza(pizza));
+    // for (let i = 0; i < json.length; i++) {
+    //   printPizza(json[i]);
+    // }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const printPizza = ({ _id, pizzaName, toppings, size, commentCount, createdBy, createdAt }) => {
@@ -40,4 +44,6 @@ const printPizza = ({ _id, pizzaName, toppings, size, commentCount, createdBy, c
   $pizzaList.innerHTML += pizzaCard;
 };
 
-window.addEventListener('DOMContentLoaded', getAllPizzas);
+getAllPizzas();
+
+// window.addEventListener('DOMContentLoaded', getAllPizzas);
