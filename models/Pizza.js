@@ -43,8 +43,19 @@ const PizzaSchema = new Schema
 // with a helper before responding to the API request
 PizzaSchema.virtual('commentCount')
 .get(function() {
-  return this.comments.length; 
+  return this.comments.reduce((total, comment) => total + comment.replies.length + 1, 0);
 });
+//using reduce method to tally up the total of every comment with replies
+// in its basic form, reuce takes two parameters (accumulator, currentVal)
+// accumulator is total and the currentVal is comment
+// as reduce walks through the array, it passes the accumulating total and
+// the current value of comment into the function, with the return of the
+// function revising the total for the next iteration through the array
+
+// similar to .map(), .reduce() executes a function on each element on the array
+// but this time it uses the result of each function execution for each
+// successive computation as it goes through the array.
+// makes a good method for getting a sum of multiple values
 
 const Pizza = model('Pizza', PizzaSchema);
 
