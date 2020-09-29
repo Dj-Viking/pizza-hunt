@@ -67,7 +67,7 @@ const handlePizzaSubmit = event => {
     window.alert('pizza created successfully');
     console.log("pizza created successfully");
     console.log(json);
-    //document.location.replace('/');
+    document.location.replace('/');
   })
   .catch(e => {
     console.log(e);
