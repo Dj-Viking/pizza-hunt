@@ -79,12 +79,11 @@ const pizzaController = {
     console.log(``);
     Pizza.findOneAndUpdate
     (
-      {
-        _id: params.id
-      },
+      { _id: params.id }, 
       body,
-      {
-        new: true
+      { 
+        new: true,
+        runValidators: true
       }
     )
     .then(dbPizzaData => {
