@@ -43,12 +43,14 @@ const handlePizzaSubmit = event => {
   const createdBy = $pizzaForm.querySelector('#created-by').value;
   const size = $pizzaForm.querySelector('#pizza-size').value;
   const toppings = [...$pizzaForm.querySelectorAll('[name=topping]:checked')].map(topping => {
+    console.log(topping);
     return topping.value;
   });
 
   if (!pizzaName || !createdBy || !toppings.length) {
     return;
   }
+  console.log(toppings);
 
   const formData = { pizzaName, createdBy, size, toppings };
 
@@ -65,7 +67,7 @@ const handlePizzaSubmit = event => {
     window.alert('pizza created successfully');
     console.log("pizza created successfully");
     console.log(json);
-    document.location.replace('/');
+    //document.location.replace('/');
   })
   .catch(e => {
     console.log(e);
